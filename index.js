@@ -4,6 +4,7 @@ const cors = require('cors');
 const compression = require('compression');
 const connectDB = require('./db');
 const errorMiddleware = require('./middleware/error-middleware');
+const emailStatus = require('./services/emailStatus');
 
 // Import routers
 const authRouter = require('./router/auth-router');
@@ -68,9 +69,9 @@ app.use(express.json({
 }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════════════════
 // HEALTH CHECK ENDPOINTS (for connectivity testing)
-// ═══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════════════════
 
 app.get('/', (req, res) => {
     res.json({ 
@@ -97,6 +98,18 @@ app.get('/api/health', (req, res) => {
         message: 'API is healthy',
         timestamp: new Date().toISOString(),
         uptime: Math.floor(process.uptime()),
+    });
+});
+
+// SMTP health check endpoint
+app.get('/api/health/smtp', (req, res) => {
+    res.json({
+        status: emailStatus.isHealthy() ? 'healthy' : 'unhealthy',
+        service: 'SMTP Email Service',
+        healthy: emailStatus.isHealthy(),
+        lastError: emailStatus.getLastError(),
+        lastCheckTime: emailStatus.getLastCheckTime(),
+        timestamp: new Date().toISOString()
     });
 });
 
