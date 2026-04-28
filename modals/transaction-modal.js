@@ -37,7 +37,7 @@ const transactionSchema = new mongoose.Schema({
     timestamps: { createdAt: true, updatedAt: false }
 });
 
-transactionSchema.index({ idempotencyKey: 1 }, { unique: true });
+// Index definitions - removed duplicate index for idempotencyKey (already defined as unique: true)
 transactionSchema.index({ nurse: 1, createdAt: -1 });
 transactionSchema.index({ booking: 1 });
 
