@@ -182,7 +182,7 @@ const bookingSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Index for faster queries
+// Index for faster queries - removed duplicates and optimized for Railway
 bookingSchema.index({ patient: 1, createdAt: -1 });
 bookingSchema.index({ caregiver: 1, createdAt: -1 });
 bookingSchema.index({ date: 1, status: 1 });
